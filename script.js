@@ -1,23 +1,63 @@
-﻿const API = 'https://fakestoreapi.com/products';
+const grid = document.getElementById("grid");
+const search = document.getElementById("search");
+const sort = document.getElementById("sort");
+const themeToggle = document.getElementById("themeToggle");
+
 let products = [];
-async function init() {
+let filtered = [];
+
+// Load products from API
+async function loadProducts() {
   try {
-    const r = await fetch(API);
-    products = await r.json();
-  } catch {
-    products = await fetch('data.json').then(r=>r.json());
+    const res = await fetch("https://fakestoreapi.com/products");
+    products = await res.json();
+  } catch (e) {
+    console.log("API down, loading fallback…");
+    const res = await fetch("data.json");
+    products = await res.json();
   }
+
+  filtered = [...products];
   render();
 }
+
+// Render product cards
 function render() {
-  const grid = document.getElementById('gridWrap');
-  grid.innerHTML = '';
-  products.forEach(p=>{
-    const tmpl = document.getElementById('cardTemplate').content.cloneNode(true);
-    tmpl.querySelector('.card-img').src = p.image || 'https://via.placeholder.com/300';
-    tmpl.querySelector('.card-title').textContent = p.title;
-    tmpl.querySelector('.card-price').textContent = '$' + Number(p.price).toFixed(2);
-    grid.appendChild(tmpl);
+  grid.innerHTML = "";
+
+  filtered.forEach(p => {
+    grid.innerHTML += `
+      <div class="card">
+        <img src="${p.image}">
+        <div class="title">${p.title}</div>
+        <div class="price">$${p.price}</div>
+      </div>
+    `;
   });
 }
-window.addEventListener('load', init);
+
+// Search functionality
+search.addEventListener("input", e => {
+  const q = e.target.value.toLowerCase();
+  filtered = products.filter(p => p.title.toLowerCase().includes(q));
+  render();
+});
+
+// Sorting
+sort.addEventListener("change", () => {
+  if (sort.value === "low") filtered.sort((a,b) => a.price - b.price);
+  else if (sort.value === "high") filtered.sort((a,b) => b.price - a.price);
+  else filtered = [...products];
+  render();
+});
+
+// Theme toggle
+themeToggle.addEventListener("click", () => {
+  document.body.classList.toggle("dark");
+  themeToggle.textContent = 
+    document.body.classList.contains("dark") 
+    ? "☀ Light Mode" 
+    : "🌙 Dark Mode";
+});
+
+loadProducts();
