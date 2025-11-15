@@ -1,8 +1,3 @@
-/* script.js
- - Fetch products from fakestoreapi.com
- - Implement search, category, sort, price filter, theme toggle, modal
-*/
-
 const API = 'https://fakestoreapi.com/products';
 
 const elements = {
@@ -34,7 +29,7 @@ let products = [];
 let filtered = [];
 let favorites = new Set(JSON.parse(localStorage.getItem('favorites') || '[]'));
 
-// theme
+
 function applyTheme(theme){
   if(theme === 'dark') document.documentElement.setAttribute('data-theme','dark');
   else document.documentElement.removeAttribute('data-theme');
@@ -49,10 +44,10 @@ elements.themeToggle.addEventListener('click', () => {
   applyTheme(current === 'dark' ? 'light' : 'dark');
 });
 
-// utility
+
 function money(v){ return '₹' + Number(v).toFixed(2) }
 
-// render
+
 function showStatus(text){ elements.status.textContent = text; }
 function clearGrid(){ elements.grid.innerHTML = ''; }
 
@@ -81,7 +76,7 @@ function renderProducts(list) {
         <button class="btn-more" data-id="${p.id}">View</button>
       </div>
     `;
-    // click to open modal
+
     card.querySelector('.btn-more').addEventListener('click', (e) => {
       e.stopPropagation();
       openModal(p);
@@ -99,7 +94,6 @@ function escapeHtml(text){
   return text.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');
 }
 
-// modal
 function openModal(product){
   elements.modal.setAttribute('aria-hidden','false');
   elements.modalTitle.textContent = product.title;
@@ -118,7 +112,6 @@ function closeModal(){
 elements.modalBackdrop.addEventListener('click', closeModal);
 elements.modalClose.addEventListener('click', closeModal);
 
-// favorites
 function toggleFavorite(id, button){
   if(favorites.has(id)){ favorites.delete(id); button.textContent = '♡'; }
   else { favorites.add(id); button.textContent = '♥'; }
@@ -126,7 +119,6 @@ function toggleFavorite(id, button){
   applyFilters();
 }
 
-// filters
 function applyFilters(){
   const q = elements.searchInput.value.trim().toLowerCase();
   const cat = elements.categorySelect.value;
@@ -156,7 +148,6 @@ function applyFilters(){
   renderProducts(filtered);
 }
 
-// search events
 elements.searchInput.addEventListener('input', debounce(() => applyFilters(), 200));
 elements.clearSearch.addEventListener('click', () => { elements.searchInput.value = ''; applyFilters(); });
 elements.categorySelect.addEventListener('change', applyFilters);
@@ -179,7 +170,6 @@ elements.resetFilters.addEventListener('click', () => {
 });
 elements.showFavorites.addEventListener('change', applyFilters);
 
-// fetch & init
 async function init(){
   showStatus('Loading products...');
   try{
@@ -187,7 +177,6 @@ async function init(){
     if(!res.ok) throw new Error('Network response not ok');
     const data = await res.json();
     products = Array.isArray(data) ? data : [];
-    // fill categories
     const cats = [...new Set(products.map(p => p.category))];
     cats.forEach(c => {
       const opt = document.createElement('option');
@@ -195,13 +184,12 @@ async function init(){
       elements.categorySelect.appendChild(opt);
     });
 
-    // price slider max
     const max = Math.ceil(Math.max(...products.map(p => p.price)));
     elements.priceRange.max = max;
     elements.priceRange.value = max;
     elements.priceMaxLabel.textContent = max;
 
-    // render initial
+
     filtered = products.slice();
     renderProducts(filtered);
     showStatus(`Loaded ${products.length} products`);
@@ -213,6 +201,5 @@ async function init(){
 }
 init();
 
-// small helpers
 function capitalize(s){ return s.charAt(0).toUpperCase() + s.slice(1) }
 function debounce(fn, ms){ let t; return (...a)=>{ clearTimeout(t); t=setTimeout(()=>fn(...a), ms); } }
