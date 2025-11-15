@@ -3,26 +3,105 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Internship Assignment • Product Dashboard</title>
+  <title>Mini Product Dashboard</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <header>
-    <h1>Product Dashboard</h1>
-    <button id="themeToggle">🌙 Dark Mode</button>
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <div class="brand">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" aria-hidden>
+          <rect x="2" y="2" width="20" height="20" rx="4" stroke="currentColor" stroke-width="1.2"></rect>
+          <path d="M7 13h10M7 9h6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"></path>
+        </svg>
+        <div class="brand-text">
+          <div class="title">Product Dashboard</div>
+          <div class="subtitle">Frontend Internship Assignment</div>
+        </div>
+      </div>
+
+      <div class="search-wrap">
+        <input id="searchInput" class="search" placeholder="Search products, e.g. cotton shirt, headphones..." />
+        <button id="clearSearch" title="Clear" class="icon-btn" aria-label="Clear search">✕</button>
+      </div>
+
+      <div class="controls">
+        <select id="categorySelect" class="select">
+          <option value="all">All categories</option>
+        </select>
+
+        <select id="sortSelect" class="select">
+          <option value="default">Sort</option>
+          <option value="price-asc">Price: Low → High</option>
+          <option value="price-desc">Price: High → Low</option>
+        </select>
+
+        <button id="themeToggle" class="btn-theme" title="Toggle theme">🌗</button>
+      </div>
+    </div>
   </header>
 
-  <div class="controls">
-    <input type="text" id="search" placeholder="Search products..." />
-    <select id="sort">
-      <option value="default">Sort By</option>
-      <option value="low">Price: Low to High</option>
-      <option value="high">Price: High to Low</option>
-    </select>
+  <main class="container main">
+    <aside class="sidebar">
+      <div class="filter-card">
+        <h3>Price filter</h3>
+        <div class="price-info">
+          <span>0</span>
+          <span id="priceMaxLabel">500</span>
+        </div>
+        <input id="priceRange" type="range" min="0" max="1000" step="1" value="1000">
+        <div class="filter-actions">
+          <button id="resetFilters" class="btn">Reset</button>
+        </div>
+      </div>
+
+      <div class="filter-card">
+        <h3>Extras</h3>
+        <div class="checkbox">
+          <input type="checkbox" id="showFavorites" />
+          <label for="showFavorites">Show favorites</label>
+        </div>
+        <p class="small muted">Favorites are saved locally in your browser.</p>
+      </div>
+    </aside>
+
+    <section class="content">
+      <div id="statusBar" class="status">Loading products...</div>
+
+      <div id="grid" class="grid">
+        <!-- product cards injected here -->
+      </div>
+
+      <div id="noResults" class="no-results" hidden>
+        No products found. Try adjusting filters or search.
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal -->
+  <div id="modal" class="modal" aria-hidden="true">
+    <div class="modal-backdrop" id="modalBackdrop"></div>
+    <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <button id="modalClose" class="modal-close" aria-label="Close">✕</button>
+      <div class="modal-body">
+        <img id="modalImage" src="" alt="" />
+        <div class="modal-info">
+          <h2 id="modalTitle"></h2>
+          <p id="modalCategory" class="muted small"></p>
+          <p id="modalDescription"></p>
+          <div class="modal-meta">
+            <div class="price" id="modalPrice"></div>
+            <div class="rating" id="modalRating"></div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <section id="grid"></section>
-
-  <script src="script.js"></script>
+  <script src="script.js" defer></script>
 </body>
 </html>
