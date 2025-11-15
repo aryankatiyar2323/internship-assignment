@@ -1,63 +1,27 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Mini Product Dashboard</title>
+  <title>Internship Assignment • Product Dashboard</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
-<body data-theme="light">
-  <header class="header">
-    <h1 class="brand">Mini Product Dashboard</h1>
-    <div class="header-controls">
-      <button id="themeToggle" class="btn small">Toggle Theme</button>
-      <div id="favoritesCount" class="fav-count" title="Favorites">❤ 0</div>
-    </div>
+<body>
+  <header>
+    <h1>Product Dashboard</h1>
+    <button id="themeToggle">🌙 Dark Mode</button>
   </header>
 
-  <main class="container">
-    <section class="controls">
-      <div class="search-wrap">
-        <input id="searchInput" type="search" placeholder="Search products by title..." />
-      </div>
-
-      <div class="filters">
-        <select id="categorySelect">
-          <option value="all">All categories</option>
-        </select>
-
-        <select id="sortSelect">
-          <option value="default">Sort: Default</option>
-          <option value="price-asc">Price: Low → High</option>
-          <option value="price-desc">Price: High → Low</option>
-        </select>
-      </div>
-    </section>
-
-    <section id="gridWrap" class="grid-wrap"></section>
-    <nav id="pagination" class="pagination"></nav>
-  </main>
-
-  <div id="modal" class="modal hidden">
-    <div class="modal-content">
-      <button id="modalClose" class="modal-close">✕</button>
-      <div id="modalBody"></div>
-    </div>
+  <div class="controls">
+    <input type="text" id="search" placeholder="Search products..." />
+    <select id="sort">
+      <option value="default">Sort By</option>
+      <option value="low">Price: Low to High</option>
+      <option value="high">Price: High to Low</option>
+    </select>
   </div>
 
-  <template id="cardTemplate">
-    <article class="card">
-      <img class="card-img" alt="product image" />
-      <div class="card-body">
-        <h3 class="card-title"></h3>
-        <p class="card-price"></p>
-        <div class="card-actions">
-          <button class="btn view-btn">View</button>
-          <button class="btn fav-btn">♡</button>
-        </div>
-      </div>
-    </article>
-  </template>
+  <section id="grid"></section>
 
   <script src="script.js"></script>
 </body>
